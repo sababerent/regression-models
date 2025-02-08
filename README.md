@@ -14,9 +14,12 @@ This repository contains implementations of various regression models, starting 
 ## Project Structure
 ```
 regression-models/
-│── LinearStudents_Performance_Linear_Regression.py  # Main script for Linear Regression
-│── data/                                            # Directory for dataset (not included in repo)
-│── README.md                                        # Project documentation
+│── models/                          # Contains different regression models
+│   ├── linear_regression.py         # Simple Linear Regression model
+│   ├── polynomial_regression.py     # (Can be added in the future)
+│── data/                            # Folder for dataset files (not included in repo)
+│── README.md                        # Project documentation
+│── LICENSE                          # License file
 ```
 
 ## Requirements
