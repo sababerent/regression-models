@@ -13,13 +13,15 @@ This repository contains implementations of various regression models, starting 
 
 ## Project Structure
 ```
-regression-models/
-│── models/                          # Contains different regression models
-│   ├── linear_regression.py         # Simple Linear Regression model
-│   ├── polynomial_regression.py     # (Can be added in the future)
-│── data/                            # Folder for dataset files (not included in repo)
-│── README.md                        # Project documentation
-│── LICENSE                          # License file
+regression/                            # Contains different regression models
+├── linear_regression/
+│   ├── linear_regression.py           # Simple Linear Regression model
+│   ├── README.md                      # Project documentation
+├── multiple_linear_regression/
+│   ├── multiple_linear_regression.py  # Simple Multiple Linear Regression model
+│   ├── README.md                      # Project documentation
+│── LICENSE                            # License file
+
 ```
 
 ## Requirements
