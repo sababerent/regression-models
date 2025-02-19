@@ -1,0 +1,135 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+import tkinter as tk
+from tkinter import filedialog
+
+# Adding the libraries we need
+
+root = tk.Tk()
+root.withdraw()
+
+file_path = filedialog.askopenfilename()
+
+# Uploading our data set
+
+# ADDITIONAL REMINDER: For the most efficient result, the data set can be downloaded
+# and run via the link I have provided.
+# kaggle link: " https://www.kaggle.com/datasets/sakshamjn/heightvsweight-for-linear-polynomial-regression "
+
+datas_df = pd.read_csv(file_path)
+datas_df.head()
+
+# Reading our data set and previewing the first 5 lines
+
+import seaborn as sns
+sns.pairplot(datas_df , kind="reg")
+
+# Visualizing the relationship between data for better understanding.
+
+datas_df.shape
+
+# It is important that we get more information about the data set. In this
+# way, we have a better command of our data set and can prepare our model better.
+
+datas_df.isnull().sum()
+
+# Checking whether there are empty elements in it. The presence of empty elements
+# will directly and negatively affect the result.
+
+x = np.array(datas_df['Age']).reshape(-1,1)
+y = np.array(datas_df['Height']).reshape(-1,1)
+
+# Determining our dependent and independent values ​​and updating their dimensions
+# in a way that the regression model can understand. Since this regression model
+# can detect 2D, we convert both of our values ​​to 2D.
+
+from sklearn.model_selection import train_test_split
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.20)
+
+# Defining our training and test data by dividing them into connected and independent
+# values. The test_size section shows how many percentage distributions will be made.
+# In this example, that means 80% will be used for training and the remaining 20%
+# ​​will be used for testing.
+
+from sklearn.linear_model import LinearRegression
+linear_reg = LinearRegression()
+
+# In order to understand our model better and see its efficiency better, we first call
+# our linear regression model and include it in our program.
+
+linear_reg.fit(x_train, y_train)
+
+# Realization of machine learning with our training data through the linear regression
+# model. Here, we train our program with the training data we obtain from our data set with the fit command.
+
+y_pred = linear_reg.predict(x_test)
+accuracy_score = linear_reg.score(x_test, y_test)
+
+# Making predictions using the linear regression model and then calculating the success scores of
+# the predictions. In this way, we can make our comparison mathematically much more easily and decide
+# which one is more efficient.
+
+print("Linear Regression Model Accuracy Score: " + "{:.1%}".format(accuracy_score))
+
+# Displaying the accuracy score of the linear regression model
+
+plt.scatter(x_test , y_test, color='r')
+plt.plot(x_test, y_pred, color='g')
+plt.show()
+
+# Graphical visualization of the result. Thus, we can see most of the data that he missed
+# or could potentially give an incorrect answer to.
+# And as you can see, our graph misses most of the real answers.
+
+from sklearn.preprocessing import PolynomialFeatures
+poli_reg = PolynomialFeatures(degree = 4)
+transform_poli = poli_reg.fit_transform(x_train)
+
+# Calling the library required for the polynomial regression model and adding the model itself
+# to the program. Then, training the program on the training data using the model.
+
+linear_reg2 = LinearRegression()
+linear_reg2.fit(transform_poli,y_train)
+
+# Although we will perform polynomial regression in this model, we still call it linear
+# regression in the program.
+
+poli_predict = linear_reg2.predict(transform_poli)
+
+# Estimating the polynomial regression model. The prediction of this model is slightly
+# different from linear or mutli linear.
+
+from sklearn.metrics import mean_squared_error, r2_score
+rmse = np.sqrt(mean_squared_error(y_train, poli_predict))
+r2 = r2_score(y_train, poli_predict)
+
+# Calculation of the model's efficiency to better understand it. At this point,
+# the root mean error result and R2 score result will help us.
+
+print("Root Mean Error for test data: " + "{:.2}".format(rmse))
+print("R2 Score for test data: " + "{:.2}".format(r2))
+
+# Visualization of results
+
+plt.scatter(x_train,y_train)
+
+import operator
+sort_axis = operator.itemgetter(0)
+sorted_zip = sorted(zip(x_train,poli_predict), key=sort_axis)
+x_train, poli_predict = zip(*sorted_zip)
+plt.plot(x_train, poli_predict, color='r' , label = 'Polynomial Regression')
+plt.plot(x_test, y_pred, color = 'g' , label = 'Linear Regression')
+plt.xlabel('Age')
+plt.ylabel('Height')
+plt.legend()
+plt.show()
+
+# Visualize the results of both to more easily compare the compatibility and efficiency of the models.
+
+linear_reg.predict([[24]])
+
+linear_reg2.predict(poli_reg.fit_transform([[24]]))
+
+# Finally, we send the same value to both models, see the difference in the results between
+# them and test the models.
